@@ -1,0 +1,190 @@
+# ============================================================
+#  DeathMsg - komunikaty o śmierci na czacie
+#
+#  Format tekstu: MiniMessage  ->  <red>, <bold>, <#FFD700>, <gradient:red:gold>...
+#  Dostępne zmienne:
+#    %victim%  - gracz, który zginął
+#    %killer%  - gracz, który zabił (tylko w pvp)
+#    %weapon%  - przedmiot z ręki zabójcy (pvp)
+#    %mob%     - nazwa moba, który zabił
+#    %world%   - nazwa świata,   %x% %y% %z% - współrzędne śmierci
+#
+#  Przy każdej kategorii jest LISTA wiadomości - przy śmierci plugin losuje jedną.
+#  Chcesz tylko jedną? Zostaw jedną linię. Pusta lista = kategoria wyłączona.
+#
+#  Po zmianach wpisz /deathmsg reload
+#  Podgląd bez umierania: /deathmsg test <kategoria>   (np. pvp, mob, FALL, CREEPER)
+# ============================================================
+
+settings:
+  # ALL   - komunikat widzą wszyscy gracze na serwerze
+  # WORLD - tylko gracze w tym samym świecie co ofiara
+  broadcast-scope: ALL
+  # true  - jeśli dla danej przyczyny nic nie ustawiono (i nie ma "default"),
+  #         zostaje zwykły komunikat Minecrafta
+  # false - wtedy nic nie jest wysyłane
+  fallback-to-vanilla: true
+  # Tekst doklejany na początku każdego komunikatu (może być pusty)
+  prefix: ""
+
+# Nazwy mobów używane w %mob% (klucz = id moba wielkimi literami).
+# Brakujący mob dostaje automatyczną nazwę, np. WITHER_SKELETON -> Wither Skeleton.
+# Mob z własną nazwą (name tag) pokazuje swoją nazwę.
+mob-names:
+  ZOMBIE: "Zombie"
+  ZOMBIE_VILLAGER: "Zombie-osadnik"
+  HUSK: "Husk"
+  DROWNED: "Utopiec"
+  SKELETON: "Szkielet"
+  STRAY: "Tułacz"
+  WITHER_SKELETON: "Szkielet witherowy"
+  CREEPER: "Creeper"
+  SPIDER: "Pająk"
+  CAVE_SPIDER: "Jaskiniowy pająk"
+  ENDERMAN: "Enderman"
+  WITCH: "Wiedźma"
+  BLAZE: "Blaze"
+  GHAST: "Ghast"
+  SLIME: "Szlam"
+  MAGMA_CUBE: "Kostka magmy"
+  PIGLIN: "Piglin"
+  PIGLIN_BRUTE: "Brutalny piglin"
+  ZOMBIFIED_PIGLIN: "Zombie piglin"
+  HOGLIN: "Hoglin"
+  PHANTOM: "Fantom"
+  PILLAGER: "Rabuś"
+  VINDICATOR: "Obrońca"
+  EVOKER: "Przywoływacz"
+  RAVAGER: "Pustoszyciel"
+  VEX: "Dokuczacz"
+  GUARDIAN: "Strażnik"
+  ELDER_GUARDIAN: "Starszy strażnik"
+  SHULKER: "Shulker"
+  WARDEN: "Warden"
+  WITHER: "Wither"
+  ENDER_DRAGON: "Smok Endu"
+  IRON_GOLEM: "Żelazny golem"
+  WOLF: "Wilk"
+  POLAR_BEAR: "Niedźwiedź polarny"
+  BEE: "Pszczoła"
+
+# Nazwy przedmiotów w %weapon% (klucz = id przedmiotu wielkimi literami).
+# Przedmiot z własną nazwą pokazuje swoją nazwę. AIR = zabicie gołą ręką.
+item-names:
+  AIR: "pięść"
+  WOODEN_SWORD: "drewniany miecz"
+  STONE_SWORD: "kamienny miecz"
+  IRON_SWORD: "żelazny miecz"
+  GOLDEN_SWORD: "złoty miecz"
+  DIAMOND_SWORD: "diamentowy miecz"
+  NETHERITE_SWORD: "netherytowy miecz"
+  WOODEN_AXE: "drewniana siekiera"
+  STONE_AXE: "kamienna siekiera"
+  IRON_AXE: "żelazna siekiera"
+  GOLDEN_AXE: "złota siekiera"
+  DIAMOND_AXE: "diamentowa siekiera"
+  NETHERITE_AXE: "netherytowa siekiera"
+  BOW: "łuk"
+  CROSSBOW: "kusza"
+  TRIDENT: "trójząb"
+  MACE: "buzdygan"
+
+messages:
+
+  # --- Zabójstwo przez gracza, bronią w ręku ------------------------------
+  pvp:
+    - "<dark_red>☠ <white>%killer% <gray>zabił <white>%victim% <gray>używając <yellow>%weapon%<gray>."
+    - "<dark_red>☠ <white>%victim% <gray>padł od ciosu <yellow>%weapon% <gray>gracza <white>%killer%<gray>."
+    - "<dark_red>☠ <white>%killer% <gray>rozprawił się z <white>%victim% <gray>(<yellow>%weapon%<gray>)."
+
+  # --- Zabójstwo gołą ręką ------------------------------------------------
+  pvp-fist:
+    - "<dark_red>☠ <white>%killer% <gray>zatłukł <white>%victim% <gray>gołymi pięściami."
+
+  # --- Zabójstwo strzałą / kuszą / trójzębem rzuconym przez gracza ------
+  pvp-projectile:
+    - "<dark_red>☠ <white>%killer% <gray>ustrzelił <white>%victim% <gray>(<yellow>%weapon%<gray>)."
+    - "<dark_red>☠ <white>%victim% <gray>dostał pociskiem od <white>%killer%<gray>."
+
+  # --- Zabójstwo przez moba (jeśli nie ma wpisu w "mobs" poniżej) --------
+  mob:
+    - "<red>☠ <white>%victim% <gray>został zabity przez <red>%mob%<gray>."
+    - "<red>☠ <white>%mob% <gray>skończył żywot gracza <white>%victim%<gray>."
+
+  # --- Zabójstwo pociskiem moba (np. szkielet, blaze, ghast) -------------
+  mob-projectile:
+    - "<red>☠ <white>%victim% <gray>został zastrzelony przez <red>%mob%<gray>."
+
+  # --- Wpisy dla konkretnych mobów (nadpisują "mob" / "mob-projectile") --
+  mobs:
+    CREEPER:
+      - "<green>☠ <white>%victim% <gray>wyleciał w powietrze przez <green>Creepera<gray>. <dark_gray>Ssssss..."
+      - "<green>☠ <white>%victim% <gray>przytulił <green>Creepera <gray>o jeden raz za dużo."
+    ENDER_DRAGON:
+      - "<dark_purple>☠ <white>%victim% <gray>został pożarty przez <dark_purple>Smoka Endu<gray>."
+    WITHER:
+      - "<dark_gray>☠ <white>%victim% <gray>uległ potędze <dark_gray>Withera<gray>."
+
+  # --- Przyczyny obrażeń (nazwy z Bukkit DamageCause) ---------------------
+  causes:
+    FALL:
+      - "<gold>☠ <white>%victim% <gray>spadł z wysokości i nie przeżył."
+      - "<gold>☠ <white>%victim% <gray>zapomniał, że nie umie latać."
+      - "<gold>☠ <white>%victim% <gray>uderzył w ziemię zbyt mocno."
+    FIRE:
+      - "<gold>☠ <white>%victim% <gray>spłonął żywcem."
+    FIRE_TICK:
+      - "<gold>☠ <white>%victim% <gray>spłonął na popiół."
+    LAVA:
+      - "<gold>☠ <white>%victim% <gray>wykąpał się w lawie."
+      - "<gold>☠ <white>%victim% <gray>próbował pływać w lawie."
+    DROWNING:
+      - "<aqua>☠ <white>%victim% <gray>utonął."
+    SUFFOCATION:
+      - "<gray>☠ <white>%victim% <gray>udusił się w ścianie."
+    STARVATION:
+      - "<gray>☠ <white>%victim% <gray>umarł z głodu."
+    VOID:
+      - "<dark_purple>☠ <white>%victim% <gray>wypadł poza świat."
+    LIGHTNING:
+      - "<yellow>☠ <white>%victim% <gray>został rażony piorunem."
+    BLOCK_EXPLOSION:
+      - "<red>☠ <white>%victim% <gray>wyleciał w powietrze."
+    ENTITY_EXPLOSION:
+      - "<red>☠ <white>%victim% <gray>został rozerwany przez wybuch."
+    MAGIC:
+      - "<light_purple>☠ <white>%victim% <gray>zginął od magii."
+    POISON:
+      - "<dark_green>☠ <white>%victim% <gray>zmarł od trucizny."
+    WITHER:
+      - "<dark_gray>☠ <white>%victim% <gray>uschnął od efektu Withera."
+    FALLING_BLOCK:
+      - "<gray>☠ <white>%victim% <gray>został przygnieciony przez spadający blok."
+    CONTACT:
+      - "<green>☠ <white>%victim% <gray>nadział się na kaktusa."
+    HOT_FLOOR:
+      - "<gold>☠ <white>%victim% <gray>spłonął na magmie."
+    FREEZE:
+      - "<aqua>☠ <white>%victim% <gray>zamarzł na śmierć."
+    THORNS:
+      - "<red>☠ <white>%victim% <gray>zginął od kolców przeciwnika."
+    CRAMMING:
+      - "<gray>☠ <white>%victim% <gray>został zgnieciony w tłumie."
+    FLY_INTO_WALL:
+      - "<gold>☠ <white>%victim% <gray>rozbił się w locie o ścianę."
+    SUICIDE:
+      - "<gray>☠ <white>%victim% <gray>postanowił skończyć ze sobą."
+    KILL:
+      - "<gray>☠ <white>%victim% <gray>został usunięty z gry."
+    CAMPFIRE:
+      - "<gold>☠ <white>%victim% <gray>spłonął przy ognisku."
+    DRAGON_BREATH:
+      - "<dark_purple>☠ <white>%victim% <gray>zginął od oddechu smoka."
+    SONIC_BOOM:
+      - "<dark_aqua>☠ <white>%victim% <gray>został zdmuchnięty przez Wardena."
+    WORLD_BORDER:
+      - "<gray>☠ <white>%victim% <gray>zginął na granicy świata."
+
+  # --- Gdy nic nie pasuje -------------------------------------------------
+  default:
+    - "<gray>☠ <white>%victim% <gray>zginął."
